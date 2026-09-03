@@ -6,38 +6,8 @@
   <title>Notre Parcours Préparation Mariage</title>
 
   <!-- Manifest intégré directement dans le HTML -->
-  <script type="application/ld+json">
-  {
-    "name": "Parcours Préparation au Mariage",
-    "short_name": "Prépa Mariage",
-    "description": "Application de préparation au mariage",
-    "start_url": "./",
-    "scope": "/",
-    "display": "standalone",
-    "background_color": "#ffffff",
-    "theme_color": "#0f172a",
-    "lang": "fr",
-    "icons": [
-      {
-        "src": "https://drive.google.com/uc?export=download&id=1kBFfdBfqkBh5cwubniJ4cNTzzTFaoYX2",
-        "sizes": "192x192",
-        "type": "image/png"
-      },
-      {
-        "src": "https://drive.google.com/uc?export=download&id=1kBFfdBfqkBh5cwubniJ4cNTzzTFaoYX2",
-        "sizes": "512x512",
-        "type": "image/png"
-      },
-      {
-        "src": "https://drive.google.com/uc?export=download&id=1kBFfdBfqkBh5cwubniJ4cNTzzTFaoYX2",
-        "sizes": "180x180",
-        "type": "image/png",
-        "purpose": "apple touch icon"
-      }
-    ]
-  }
-  </script>
-
+  <link rel="manifest" href="manifest.json">
+  
   <!-- Balises pour iOS -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -391,19 +361,17 @@
       document.getElementById('webapp-content').style.display = 'block';
 
        // ========== ENREGISTREMENT DU SERVICE WORKER (version intégrée) ==========
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          // Remplacez VOTRE_UTILISATEUR par votre nom d'utilisateur GitHub
-          navigator.serviceWorker.register('https://FBAUD71.github.io/prepa-mariage-sw/service-worker.js')
-            .then(registration => {
-              console.log('✅ ServiceWorker enregistré avec succès !');
-            })
-            .catch(err => {
-              console.log('❌ Échec de l\'enregistrement du ServiceWorker : ', err);
-            });
-        });
-      }
-    }
+      if ('serviceWorker' in navigator && page !== 'install') {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./service-worker.js')
+      .then(registration => {
+        console.log('✅ ServiceWorker enregistré avec succès !');
+      })
+      .catch(err => {
+        console.log('❌ Échec de l\'enregistrement du ServiceWorker : ', err);
+      });
+  });
+}
     // ========== VOS SCRIPTS EXISTANTS ==========
     let session = null;
     window.sessionStartTime = null;
