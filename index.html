@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Notre Parcours Préparation Mariage</title>
+
+  <!-- Manifest intégré directement dans le HTML -->
+  <script type="application/ld+json">
+  {
+    "name": "Parcours Préparation au Mariage",
+    "short_name": "Prépa Mariage",
+    "description": "Application de préparation au mariage",
+    "start_url": "./",
+    "scope": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#0f172a",
+    "lang": "fr",
+    "icons": [
+      {
+        "src": "https://drive.google.com/uc?export=download&id=1kBFfdBfqkBh5cwubniJ4cNTzzTFaoYX2",
+        "sizes": "192x192",
+        "type": "image/png"
+      },
+      {
+        "src": "https://drive.google.com/uc?export=download&id=1kBFfdBfqkBh5cwubniJ4cNTzzTFaoYX2",
+        "sizes": "512x512",
+        "type": "image/png"
+      },
+      {
+        "src": "https://drive.google.com/uc?export=download&id=1kBFfdBfqkBh5cwubniJ4cNTzzTFaoYX2",
+        "sizes": "180x180",
+        "type": "image/png",
+        "purpose": "apple touch icon"
+      }
+    ]
+  }
+  </script>
+
+  <!-- Balises pour iOS -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Prépa Mariage">
+  <link rel="apple-touch-icon" href="https://drive.google.com/uc?export=download&id=1kBFfdBfqkBh5cwubniJ4cNTzzTFaoYX2">
+
+  <!-- Polices et Bootstrap -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Vos styles CSS -->
+  <style>
+    /* Vos styles existants */
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: linear-gradient(rgba(15, 23, 42, 0.45), rgba(15, 23, 42, 0.65)),
+                  url('https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=2070&auto=format&fit=crop');
+      background-attachment: fixed;
+      background-size: cover;
+      background-position: center;
+      min-height: 100vh;
+    }
+
+    /* Style pour la page d'installation */
+    .install-container {
+      text-align: center;
+      padding: 50px;
+      background-color: rgba(255, 255, 255, 0.9);
+      border-radius: 20px;
+      max-width: 600px;
+      margin: 50px auto;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .install-btn {
+      background-color: #0f172a;
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      font-size: 18px;
+      border-radius: 10px;
+      cursor: pointer;
+      margin: 20px;
+    }
+
+    .install-btn:hover {
+      background-color: #1a2332;
+    }
+
+    .logo {
+      max-width: 150px;
+      margin: 20px;
+    }
+
+    /* Style de la carte de connexion en effet dépoli (Glassmorphism) */
+    .glass-card {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(8px);
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Grille et boutons des modules */
+    .module-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-top: 30px;
+    }
+
+    .module-btn {
+      height: 120px;
+      border-radius: 15px;
+      border: none;
+      color: white;
+      font-weight: bold;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.2s, box-shadow 0.2s;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      padding: 10px;
+      text-align: center;
+    }
+
+    .module-btn:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+    }
+
+    .module-btn:disabled {
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+
+    /* Couleurs des boutons et des badges de statut */
+    .btn-locked, .bg-statut-gris { background-color: #94a3b8 !important; color: #ffffff !important; }
+    .btn-current, .bg-statut-bleu { background-color: #0d6efd !important; color: #ffffff !important; }
+    .btn-done, .bg-statut-vert { background-color: #10b981 !important; color: #ffffff !important; }
+    .bg-statut-orange { background-color: #f97316 !important; color: #ffffff !important; }
+
+    .module-num {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      margin-bottom: 5px;
+      opacity: 0.8;
+    }
+
+    .module-name {
+      font-size: 1rem;
+      line-height: 1.2;
+    }
+
+    /* Animation douce de pulsation orange */
+    @keyframes pulse-orange-button {
+      0% {
+        background-color: #f97316 !important;
+        border-color: #ea580c !important;
+        box-shadow: 0 0 0 0 rgba(249, 115, 22, 0.8);
+      }
+      50% {
+        background-color: #ea580c !important;
+        border-color: #c2410c !important;
+        box-shadow: 0 0 0 10px rgba(249, 115, 22, 0);
+      }
+      100% {
+        background-color: #f97316 !important;
+        border-color: #ea580c !important;
+        box-shadow: 0 0 0 0 rgba(249, 115, 22, 0);
+      }
+    }
+
+    .btn-module-attente-pulse {
+      animation: pulse-orange-button 1.8s infinite !important;
+      background-color: #f97316 !important;
+      color: #ffffff !important;
+      font-weight: bold !important;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- ==================== PAGE D'INSTALLATION ==================== -->
+  <div id="install-content" style="display: none;">
+    <div class="install-container">
+      <img src="https://drive.google.com/uc?export=download&id=1kBFfdBfqkBh5cwubniJ4cNTzzTFaoYX2" alt="Logo Prépa Mariage" class="logo">
+      <h1>Installer l'application Prépa Mariage</h1>
+      <p>Cliquez sur le bouton ci-dessous pour installer l'application sur votre écran d'accueil.</p>
+      <button class="install-btn" id="installButton">Installer l'application</button>
+      <div id="ios-instructions" style="display: none;">
+        <p><strong>Sur iPhone/iPad :</strong></p>
+        <p>1. Appuyez sur le bouton <strong>Partager</strong> (⎋) en bas de l'écran.</p>
+        <p>2. Sélectionnez <strong>« Sur l'écran d'accueil »</strong>.</p>
+      </div>
+      <div id="android-instructions">
+        <p><strong>Sur Android :</strong></p>
+        <p>1. Appuyez sur le bouton <strong>Installer</strong> ci-dessus.</p>
+        <p>2. Ou ouvrez le menu de votre navigateur (⋮) et sélectionnez <strong>« Installer l'application »</strong>.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== WEB APP PRINCIPALE ==================== -->
+  <div id="webapp-content">
+    <!-- 1. COMPOSANT HTML DE LA POP-UP -->
+    <div id="testModal" style="display: none; position: fixed; z-index: 10000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.65); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); align-items: center; justify-content: center;">
+      <div style="background: #ffffff; padding: 25px 30px; border-radius: 16px; max-width: 400px; width: 90%; text-align: center; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2); font-family: 'Plus Jakarta Sans', sans-serif;">
+        <div id="testModalIcon" style="font-size: 2.5rem; margin-bottom: 10px;">ℹ️</div>
+        <h5 id="testModalTitle" style="font-family: 'Playfair Display', Georgia, serif; font-weight: bold; color: #0f172a; margin-bottom: 10px;">Titre</h5>
+        <p id="testModalMessage" style="color: #475569; font-size: 0.95rem; margin-bottom: 20px; line-height: 1.4;">Message...</p>
+        <div style="display: flex; gap: 10px; justify-content: center;">
+          <button id="testModalBtnConfirm" type="button" style="background: #0f172a; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; flex: 1;">OK</button>
+          <button id="testModalBtnCancel" type="button" style="background: #e2e8f0; color: #475569; border: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; display: none; flex: 1;">Annuler</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Fenêtre modale d'inscription -->
+    <div id="registerModal" style="display: none; position: fixed; z-index: 10000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.65); backdrop-filter: blur(4px); align-items: center; justify-content: center;">
+      <div style="background: #ffffff; padding: 25px 30px; border-radius: 16px; max-width: 500px; width: 90%; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2); max-height: 90vh; overflow-y: auto;">
+        <h4 style="font-family: 'Playfair Display', Georgia, serif; font-weight: bold; color: #0f172a; margin-bottom: 15px; text-align: center;">Première connexion / Inscription</h4>
+        <div id="registerError" style="display: none; background-color: #fef2f2; color: #dc2626; border: 1px solid #fca5a5; padding: 10px 12px; border-radius: 8px; font-size: 0.85rem; font-weight: bold; margin-bottom: 15px; text-align: center;"></div>
+        <form id="registerForm" onsubmit="handleRegisterSubmit(event)">
+          <div style="margin-bottom: 12px; background: #f8fafc; padding: 10px; border-radius: 8px; border: 1px solid #e2e8f0;">
+            <label style="font-size: 0.85rem; font-weight: bold; color: #0f172a;">🔑 Clé d'inscription (reçue par mail)</label>
+            <input type="text" id="reg_cle" required style="width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; margin-top: 4px;" placeholder="Ex: PREPA-2026">
+          </div>
+          <div style="display: flex; gap: 10px; margin-bottom: 12px;">
+            <div style="flex: 1;">
+              <label style="font-size: 0.85rem; font-weight: bold; color: #475569;">Identifiant</label>
+              <input type="text" id="reg_identifiant" required style="width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box;">
+            </div>
+            <div style="flex: 1;">
+              <label style="font-size: 0.85rem; font-weight: bold; color: #475569;">Mot de passe</label>
+              <input type="password" id="reg_password" required style="width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box;">
+            </div>
+          </div>
+          <div style="margin-bottom: 12px;">
+            <label style="font-size: 0.85rem; font-weight: bold; color: #475569;">Adresse E-mail du couple</label>
+            <input type="email" id="reg_email" required style="width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box;" placeholder="exemple@domaine.com">
+          </div>
+          <div style="display: flex; gap: 10px; margin-bottom: 12px;">
+            <div style="flex: 1;">
+              <label style="font-size: 0.85rem; font-weight: bold; color: #475569;">Prénom (Lui)</label>
+              <input type="text" id="reg_prenom_lui" required style="width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box;">
+            </div>
+            <div style="flex: 1;">
+              <label style="font-size: 0.85rem; font-weight: bold; color: #475569;">Nom (Lui)</label>
+              <input type="text" id="reg_nom_lui" required style="width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box;">
+            </div>
+          </div>
+          <div style="display: flex; gap: 10px; margin-bottom: 12px;">
+            <div style="flex: 1;">
+              <label style="font-size: 0.85rem; font-weight: bold; color: #475569;">Prénom (Elle)</label>
+              <input type="text" id="reg_prenom_elle" required style="width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box;">
+            </div>
+            <div style="flex: 1;">
+              <label style="font-size: 0.85rem; font-weight: bold; color: #475569;">Nom (Elle)</label>
+              <input type="text" id="reg_nom_elle" required style="width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box;">
+            </div>
+          </div>
+          <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+            <div style="flex: 1;">
+              <label style="font-size: 0.85rem; font-weight: bold; color: #475569;">Date du mariage</label>
+              <input type="date" id="reg_date_mariage" required style="width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box;">
+            </div>
+            <div style="flex: 1;">
+              <label style="font-size: 0.85rem; font-weight: bold; color: #475569;">Église du mariage</label>
+              <input type="text" id="reg_eglise_mariage" required style="width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box;">
+            </div>
+          </div>
+          <div style="display: flex; gap: 10px;">
+            <button type="button" onclick="closeRegisterModal()" style="background: #e2e8f0; color: #475569; border: none; padding: 10px; border-radius: 8px; font-weight: bold; flex: 1; cursor: pointer;">Annuler</button>
+            <button type="submit" id="btn_register_submit" style="background: #0f172a; color: white; border: none; padding: 10px; border-radius: 8px; font-weight: bold; flex: 1; cursor: pointer;">Valider l'inscription</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- FENÊTRE MODALE TOUS ÉCRANS (PC & MOBILE) -->
+    <div id="subModuleModal" style="display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; overflow-y: auto; background-color: rgba(0,0,0,0.6); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);">
+      <div style="background-color: #ffffff; margin: 5% auto; padding: 20px; border-radius: 16px; width: 90%; max-width: 800px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); position: relative; box-sizing: border-box;">
+        <span onclick="closeSubModuleWindow()" style="position: absolute; right: 15px; top: 10px; font-size: 32px; font-weight: bold; cursor: pointer; color: #64748b; padding: 5px 10px;">&times;</span>
+        <h5 style="font-family: 'Playfair Display', Georgia, serif; color: #0f172a; font-weight: bold; margin-bottom: 15px; font-size: 1.2rem; padding-right: 30px;">📂 Activités facultatives</h5>
+        <hr style="border: 0; border-top: 1px solid #e2e8f0; margin-bottom: 20px;">
+        <div id="subModuleContentTarget" style="max-height: 60vh; overflow-y: auto; -webkit-overflow-scrolling: touch; padding-right: 5px;"></div>
+        <div style="text-align: right; margin-top: 20px; border-top: 1px solid #f1f5f9; padding-top: 15px;">
+          <button type="button" onclick="closeSubModuleWindow()" style="background-color: #0f172a; color: white; border: none; padding: 10px 24px; border-radius: 20px; font-weight: bold; cursor: pointer; font-size: 0.9rem; width: 100%; max-width: 150px;">Fermer</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ZONE CONNEXION ET TABLEAU DE BORD -->
+    <div id="app" class="container py-4">
+      <!-- ZONE CONNEXION -->
+      <div id="loginZone" class="row justify-content-center align-items-center min-vh-100 my-auto">
+        <div class="col-md-5 glass-card p-4 p-md-5 text-center my-4">
+          <div class="mb-3 text-center">
+            <img src="https://drive.google.com/thumbnail?id=1RqKx8kfcUkbYwHqp63dkcjDkxhPAk3C8&sz=w500"
+                 style="width: 75px; height: auto; object-fit: contain; filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.08));"
+                 alt="Alliances">
+          </div>
+          <h1 class="h3 fw-bold mb-1" style="color: #0f172a; font-family: 'Playfair Display', Georgia, serif; line-height: 1.2;">Parcours de préparation au mariage</h1>
+          <p class="fw-semibold" style="font-size: 1.2rem; line-height: 1.4;">
+            Paroisse Saint François d'Assise<br>
+            <span class="small mb-4" style="color: #475569;">Le Creusot et les environs</span>
+          </p>
+          <hr class="my-4" style="opacity: 0.15;">
+          <p class="text-secondary small mb-4">Saisissez vos identifiants de couple pour accéder à votre espace personnalisé et suivre vos activités.</p>
+          <div class="form-floating mb-3">
+            <input type="text" id="user" class="form-control" placeholder="Identifiant / Email" style="border-radius: 8px;">
+            <label for="user" class="text-muted">Identifiant / Email</label>
+          </div>
+          <div class="form-floating mb-4">
+            <input type="password" id="pass" class="form-control" placeholder="Mot de passe" style="border-radius: 8px;">
+            <label for="pass" class="text-muted">Mot de passe</label>
+          </div>
+          <button onclick="handleLogin()" id="btnLogin" class="btn btn-dark w-100 py-3 fw-bold shadow-sm" style="background-color: #0f172a; border-radius: 8px;">Se connecter au parcours</button>
+          <button type="button" onclick="openRegisterModal()" style="background: transparent; color: #2563eb; border: 1px solid #2563eb; padding: 10px 18px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px;">✨ Première connexion / Inscription</button>
+        </div>
+      </div>
+
+      <!-- TABLEAU DE BORD -->
+      <div id="dashboardZone" class="d-none">
+        <div class="glass-card p-4 mb-4 d-flex justify-content-between align-items-center">
+          <h2 id="welcomeMsg" class="h4 mb-0 fw-bold text-dark">Bienvenue</h2>
+          <button onclick="location.reload()" class="btn btn-outline-danger btn-sm px-3" style="border-radius: 20px;">Déconnexion</button>
+        </div>
+        <div class="glass-card p-4">
+          <h3 class="h5 mb-4 text-secondary border-bottom pb-2" style="font-family: 'Playfair Display', Georgia, serif;">Vos modules de préparation</h3>
+          <div id="modulesContainer" class="module-grid"></div>
+        </div>
+      </div>
+
+      <!-- CONTAINER POUR L'INTERFACE D'ADMINISTRATION -->
+      <div id="adminContainerZone"></div>
+    </div>
+  </div>
+
+  <!-- ==================== SCRIPTS ==================== -->
+  <script>
+    // ========== LOGIQUE POUR L'AFFICHAGE DES PAGES ==========
+    // Récupérer le paramètre 'page' dans l'URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const page = urlParams.get('page');
+
+    // Détecter si l'utilisateur est sur iOS
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+    // Afficher la bonne page en fonction du paramètre
+    if (page === 'install') {
+      document.getElementById('install-content').style.display = 'block';
+      document.getElementById('webapp-content').style.display = 'none';
+
+      // Afficher les instructions spécifiques à iOS ou Android
+      if (isIOS) {
+        document.getElementById('ios-instructions').style.display = 'block';
+        document.getElementById('android-instructions').style.display = 'none';
+        document.getElementById('installButton').style.display = 'none';
+      } else {
+        document.getElementById('ios-instructions').style.display = 'none';
+        document.getElementById('android-instructions').style.display = 'block';
+      }
+
+      // Logique pour installer la PWA
+      let deferredPrompt;
+      window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        if (!isIOS) {
+          document.getElementById('installButton').style.display = 'block';
+        }
+      });
+
+      document.getElementById('installButton').addEventListener('click', () => {
+        if (deferredPrompt) {
+          deferredPrompt.prompt();
+          deferredPrompt.userChoice.then((choiceResult) => {
+            if (choiceResult.outcome === 'accepted') {
+              // Rediriger vers la Web App principale après installation
+              window.location.href = window.location.origin + window.location.pathname;
+            }
+          });
+        }
+      });
+    } else {
+      document.getElementById('install-content').style.display = 'none';
+      document.getElementById('webapp-content').style.display = 'block';
+
+       // ========== ENREGISTREMENT DU SERVICE WORKER (version intégrée) ==========
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          // Remplacez VOTRE_UTILISATEUR par votre nom d'utilisateur GitHub
+          navigator.serviceWorker.register('https://FBAUD71.github.io/prepa-mariage-sw/service-worker.js')
+            .then(registration => {
+              console.log('✅ ServiceWorker enregistré avec succès !');
+            })
+            .catch(err => {
+              console.log('❌ Échec de l\'enregistrement du ServiceWorker : ', err);
+            });
+        });
+      }
+    }
+    // ========== VOS SCRIPTS EXISTANTS ==========
+    let session = null;
+    window.sessionStartTime = null;
+    window.heartbeatInterval = null;
+
+    // Récupération des paramètres d'URL injectés par doGet(e)
+    const queryString = <?!= typeof queryString !== 'undefined' ? JSON.stringify(queryString) : '{}' ?>;
+
+    // Au chargement du document
+    window.addEventListener('DOMContentLoaded', function() {
+      if (queryString && queryString.previewMode === "true" && queryString.module) {
+        const targetModule = parseInt(queryString.module);
+        session = {
+          role: "couple",
+          data: {
+            id: "PREVIEW",
+            prenom_epoux: "Aperçu",
+            prenom_epouse: "Accompagnateur",
+            moduleActuel: targetModule,
+            statut: "En cours"
+          }
+        };
+        window.couple = Object.assign({}, session.data);
+        if (document.getElementById('loginZone')) document.getElementById('loginZone').classList.add('d-none');
+        if (document.getElementById('dashboardZone')) document.getElementById('dashboardZone').classList.remove('d-none');
+        if (document.getElementById('welcomeMsg')) {
+          document.getElementById('welcomeMsg').innerText = "👀 Consultation libre du Module " + targetModule;
+        }
+        openModule(targetModule);
+        setTimeout(function() {
+          const btnRetour = document.querySelector("#moduleContentArea button");
+          if (btnRetour) {
+            btnRetour.innerText = "🏠 Fermer et retourner au suivi";
+            btnRetour.setAttribute("onclick", "window.close();");
+            btnRetour.className = "btn btn-sm btn-outline-secondary mb-4";
+          }
+        }, 400);
+        return;
+      }
+    });
+
+    // Fonction pour afficher une Alerte personnalisée
+    function testAlert(titre, message, icone) {
+      return new Promise((resolve) => {
+        const modal = document.getElementById("testModal");
+        document.getElementById("testModalTitle").innerText = titre || "Information";
+        document.getElementById("testModalMessage").innerText = message;
+        document.getElementById("testModalIcon").innerText = icone || "ℹ️";
+        const btnConfirm = document.getElementById("testModalBtnConfirm");
+        const btnCancel = document.getElementById("testModalBtnCancel");
+        btnCancel.style.display = "none";
+        btnConfirm.innerText = "OK";
+        modal.style.display = "flex";
+        btnConfirm.onclick = function() {
+          modal.style.display = "none";
+          resolve(true);
+        };
+      });
+    }
+
+    // Fonction pour afficher une Confirmation personnalisée (OK / Annuler)
+    function testConfirm(titre, message, icone) {
+      return new Promise((resolve) => {
+        const modal = document.getElementById("testModal");
+        document.getElementById("testModalTitle").innerText = titre || "Confirmation";
+        document.getElementById("testModalMessage").innerText = message;
+        document.getElementById("testModalIcon").innerText = icone || "❓";
+        const btnConfirm = document.getElementById("testModalBtnConfirm");
+        const btnCancel = document.getElementById("testModalBtnCancel");
+        btnCancel.style.display = "block";
+        btnConfirm.innerText = "Confirmer";
+        btnCancel.innerText = "Annuler";
+        modal.style.display = "flex";
+        btnConfirm.onclick = function() {
+          modal.style.display = "none";
+          resolve(true);
+        };
+        btnCancel.onclick = function() {
+          modal.style.display = "none";
+          resolve(false);
+        };
+      });
+    }
+
+    // SCÉNARIO DE TEST AU CLIC SUR LE BOUTON FLOTTANT
+    async function lancerTestModal() {
+      const reponse = await testConfirm(
+        "Envoi du message",
+        "Souhaitez-vous envoyer cette réponse par mail à votre accompagnateur ?",
+        "✉️"
+      );
+      if (reponse) {
+        await testAlert(
+          "Message envoyé",
+          "Votre réponse a été transmise avec succès ! (Aucune adresse URL affichée en haut sur PC)",
+          "✅"
+        );
+      } else {
+        await testAlert(
+          "Action annulée",
+          "L'envoi du message a été annulé.",
+          "🚫"
+        );
+      }
+    }
+
+    function handleLogin() {
+      const u = document.getElementById('user').value.trim();
+      const p = document.getElementById('pass').value.trim();
+      const btn = document.getElementById('btnLogin');
+      if(!u || !p) {
+        alert("Veuillez remplir tous les champs.");
+        return;
+      }
+      btn.innerText = "Vérification...";
+      btn.disabled = true;
+      google.script.run.withSuccessHandler(res => {
+        btn.innerText = "Se connecter au parcours";
+        btn.disabled = false;
+        if(res) {
+          session = res;
+          if (session.role === 'couple' && session.data && session.data.id && session.data.id !== "PREVIEW") {
+            window.sessionStartTime = new Date().getTime();
+            google.script.run.recordCoupleLastLogin(session.data.id);
+            if (window.heartbeatInterval) clearInterval(window.heartbeatInterval);
+            window.heartbeatInterval = setInterval(function() {
+              if (session && session.data && session.data.id && window.sessionStartTime) {
+                var durationInSeconds = (new Date().getTime() - window.sessionStartTime) / 1000;
+                google.script.run.recordCoupleSessionDuration(session.data.id, durationInSeconds);
+              }
+            }, 60000);
+          }
+          showDashboard();
+        } else {
+          alert("⚠️ Identifiants incorrects ou introuvables. Réessayez.");
+        }
+      }).login(u, p);
+    }
+
+    function showDashboard() {
+      if (!session) return;
+      document.getElementById('loginZone').classList.add('d-none');
+      if (session.role === 'admin') {
+        google.script.run.withSuccessHandler(htmlContent => {
+          const target = document.getElementById('adminContainerZone');
+          target.innerHTML = htmlContent;
+          const scripts = target.getElementsByTagName('script');
+          for (let i = 0; i < scripts.length; i++) {
+            eval(scripts[i].innerText);
+          }
+          if(typeof initAdminView === 'function') {
+            initAdminView(session.user);
+          }
+        }).getAdminInterfaceHtml();
+      } else {
+        document.getElementById('dashboardZone').classList.remove('d-none');
+        if (session.data && document.getElementById('welcomeMsg')) {
+          document.getElementById('welcomeMsg').innerHTML = "✨ Heureux de vous retrouver,<br>" + session.data.prenom_epoux + " & " + session.data.prenom_epouse;
+        }
+        loadModules();
+      }
+    }
+
+    function loadModules() {
+      if (!session || !session.data) return;
+      google.script.run
+        .withSuccessHandler(function(freshCoupleData) {
+          if (freshCoupleData) {
+            session.data = freshCoupleData;
+          }
+          continuerChargementListeModules();
+        })
+        .withFailureHandler(function(err) {
+          console.warn("Impossible de rafraîchir le statut sur la liste, utilisation du cache :", err);
+          continuerChargementListeModules();
+        })
+        .getCoupleDataBySubKey(session.data.cle);
+    }
+
+    function continuerChargementListeModules() {
+      google.script.run.withSuccessHandler(titles => {
+        const container = document.getElementById('modulesContainer');
+        container.innerHTML = '';
+        const currentMod = parseInt(session.data.moduleActuel) || 1;
+        const statutTexte = session.data.statut ? session.data.statut.toString().toLowerCase().trim() : "";
+        for (let i = 1; i <= 10; i++) {
+          let statusClass = "btn-locked";
+          let isBtnDisabled = true;
+          let title = titles.find(t => t[0] == i);
+          let nomModule = title ? title[1] : "Module " + i;
+          if (i < currentMod) {
+            statusClass = "btn-done";
+            isBtnDisabled = false;
+          } else if (i === currentMod) {
+            if (statutTexte.indexOf("attente") !== -1) {
+              statusClass = "btn-module-attente-pulse";
+            } else if (statutTexte.indexOf("valid") !== -1 || statutTexte.indexOf("termin") !== -1) {
+              statusClass = "btn-done";
+            } else {
+              statusClass = "btn-current";
+            }
+            isBtnDisabled = false;
+          }
+          if (session.role === 'admin') {
+            statusClass = "btn-done";
+            isBtnDisabled = false;
+          }
+          const btnHtml = `
+            <button class="module-btn ${statusClass}" ${isBtnDisabled ? 'disabled' : ''} onclick="openModule(${i})">
+              <span class="module-num">Module ${i}</span>
+              <span class="module-name">${nomModule}</span>
+            </button>
+          `;
+          container.insertAdjacentHTML('beforeend', btnHtml);
+        }
+      }).getModulesListWithTitles();
+    }
+
+    function updateHeaderStatus(numModule, statutGlobal) {
+      const badge = document.getElementById("txtModuleNum");
+      if (!badge) return;
+      const statutClean = statutGlobal ? statutGlobal.toString().trim().toLowerCase() : "";
+      badge.classList.remove(
+        "bg-secondary", "bg-success", "bg-primary", "bg-warning",
+        "bg-statut-vert", "bg-statut-bleu", "bg-statut-orange", "bg-statut-gris",
+        "btn-module-attente-pulse"
+      );
+      let labelText = `Module ${numModule}`;
+      if (statutClean.indexOf("attente") !== -1) {
+        badge.classList.add("bg-statut-orange", "btn-module-attente-pulse");
+        badge.textContent = `${labelText} - En attente de validation`;
+      }
+      else if (statutClean.indexOf("valid") !== -1 || statutClean.indexOf("termin") !== -1) {
+        badge.classList.add("bg-statut-vert");
+        badge.textContent = `${labelText} - Validé`;
+      }
+      else if (statutClean.indexOf("cours") !== -1) {
+        badge.classList.add("bg-statut-bleu");
+        badge.textContent = `${labelText} - En cours`;
+      }
+      else {
+        badge.classList.add("bg-statut-gris");
+        badge.textContent = `${labelText}`;
+      }
+    }
+
+    function openModule(num) {
+      if (!session) return;
+      const isPreview = (session.data && session.data.id === "PREVIEW");
+      let currentModOriginal = 1;
+      if (session.data && session.data.moduleActuel) {
+        currentModOriginal = parseInt(session.data.moduleActuel);
+      }
+      if (!isPreview) {
+        if (session.role !== 'admin' && num > currentModOriginal) {
+          alert("🔒 Ce module n'est pas encore accessible. Vous devez d'abord valider le module en cours.");
+          return;
+        }
+      }
+      document.getElementById('dashboardZone').classList.add('d-none');
+      document.getElementById('adminContainerZone').classList.add('d-none');
+      let moduleArea = document.getElementById('moduleContentArea');
+      if (!moduleArea) {
+        document.getElementById('app').insertAdjacentHTML('beforeend', '<div id="moduleContentArea"></div>');
+        moduleArea = document.getElementById('moduleContentArea');
+      }
+      moduleArea.classList.remove('d-none');
+      moduleArea.innerHTML = `
+        <div class="row justify-content-center">
+          <div class="col-md-10 glass-card p-4">
+            <button onclick="closeModuleView()" class="btn btn-sm btn-dark mb-4">⬅ Revenir au Tableau de Bord</button>
+            <div id="moduleInnerTarget">
+              <div class="text-center py-5">
+                <div class="spinner-border text-secondary" role="status"></div>
+                <p class="mt-2">Chargement du module ${num}...</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+      let tempCouple = {};
+      if (session.role === 'admin' && !isPreview) {
+        const selectedCoupleId = document.getElementById('detailCoupleName') ? document.getElementById('detailCoupleName').getAttribute('data-id') : "";
+        if (typeof localCouplesCache !== 'undefined' && selectedCoupleId) {
+          tempCouple = Object.assign({}, localCouplesCache.find(i => i.id == selectedCoupleId));
+        } else {
+          tempCouple = { id: "ADMIN_PREVIEW", prenom_epoux: "Mode", prenom_epouse: "Aperçu", statut: "En cours" };
+        }
+      } else {
+        tempCouple = Object.assign({}, session.data);
+      }
+      tempCouple.moduleActuel = num;
+      if (session.role === 'couple' && !isPreview) {
+        if (num < currentModOriginal) {
+          tempCouple.statut = "Validé";
+        } else {
+          tempCouple.statut = session.data.statut;
+        }
+      }
+      window.couple = tempCouple;
+      google.script.run.withSuccessHandler(htmlContent => {
+        const target = document.getElementById('moduleInnerTarget');
+        target.innerHTML = htmlContent;
+        const scripts = target.getElementsByTagName('script');
+        for (let i = 0; i < scripts.length; i++) {
+          eval(scripts[i].innerText);
+        }
+        if (typeof loadContents === 'function') {
+          loadContents(num);
+        }
+        setTimeout(function() {
+          updateHeaderStatus(num, tempCouple.statut);
+        }, 100);
+      }).getCoupleInterfaceHtml();
+    }
+
+    function closeModuleView() {
+      window.scrollTo(0, 0);
+      document.getElementById('moduleContentArea').classList.add('d-none');
+      if (session.role === 'admin') {
+        document.getElementById('adminContainerZone').classList.remove('d-none');
+      } else {
+        document.getElementById('dashboardZone').classList.remove('d-none');
+        loadModules();
+      }
+    }
+
+    function openSubModuleWindow(assetId) {
+      document.getElementById('subModuleModal').style.display = 'block';
+      document.getElementById('subModuleContentTarget').innerHTML = `
+        <div style="text-align: center; padding: 30px 0;">
+          <p style="color: #64748b; font-size: 0.9rem;">Chargement des activités complémentaires...</p>
+        </div>`;
+      let subActivities = [];
+      if (typeof items !== 'undefined' && Array.isArray(items)) {
+        const parentItem = items.find(currentItem => currentItem.id === assetId);
+        if (parentItem && parentItem.subActivities) {
+          subActivities = parentItem.subActivities;
+        }
+      }
+      google.script.run
+        .withSuccessHandler(function(htmlContenuFacultatif) {
+          document.getElementById('subModuleContentTarget').innerHTML = htmlContenuFacultatif;
+        })
+        .withFailureHandler(function(error) {
+          document.getElementById('subModuleContentTarget').innerHTML = `
+            <div class="alert alert-danger">Erreur de chargement : ${error.message}</div>`;
+        })
+        .getOptionalActivitiesHtml(subActivities);
+    }
+
+    function openSubModuleWindowDirect(subActivitiesJsonRaw) {
+      document.getElementById('subModuleModal').style.display = 'block';
+      document.getElementById('subModuleContentTarget').innerHTML = `
+        <div style="text-align: center; padding: 30px 0;">
+          <p style="color: #64748b; font-size: 0.9rem;">Chargement des activités complémentaires...</p>
+        </div>`;
+      let subActivities = [];
+      try {
+        subActivities = JSON.parse(subActivitiesJsonRaw);
+      } catch(e) {
+        console.error("Erreur de décodage des sous-activités :", e);
+      }
+      google.script.run
+        .withSuccessHandler(function(htmlContenuFacultatif) {
+          document.getElementById('subModuleContentTarget').innerHTML = htmlContenuFacultatif;
+        })
+        .withFailureHandler(function(error) {
+          document.getElementById('subModuleContentTarget').innerHTML = `
+            <div class="alert alert-danger">Erreur de chargement : ${error.message}</div>`;
+        })
+        .getOptionalActivitiesHtml(subActivities);
+    }
+
+    function closeSubModuleWindow() {
+      document.getElementById('subModuleModal').style.display = 'none';
+    }
+
+    function openRegisterModal() {
+      document.getElementById("registerForm").reset();
+      document.getElementById("registerModal").style.display = "flex";
+    }
+
+    function closeRegisterModal() {
+      document.getElementById("registerModal").style.display = "none";
+    }
+
+    function handleRegisterSubmit(event) {
+      event.preventDefault();
+      const btn = document.getElementById("btn_register_submit");
+      const errDiv = document.getElementById("registerError");
+      errDiv.style.display = "none";
+      errDiv.innerText = "";
+      btn.disabled = true;
+      btn.innerText = "Traitement en cours...";
+      const coupleData = {
+        cleInscription: document.getElementById("reg_cle").value.trim(),
+        identifiant: document.getElementById("reg_identifiant").value.trim(),
+        password: document.getElementById("reg_password").value.trim(),
+        email: document.getElementById("reg_email").value.trim(),
+        prenomLui: document.getElementById("reg_prenom_lui").value.trim(),
+        nomLui: document.getElementById("reg_nom_lui").value.trim(),
+        prenomElle: document.getElementById("reg_prenom_elle").value.trim(),
+        nomElle: document.getElementById("reg_nom_elle").value.trim(),
+        dateMariage: document.getElementById("reg_date_mariage").value,
+        egliseMariage: document.getElementById("reg_eglise_mariage").value.trim()
+      };
+      google.script.run
+        .withSuccessHandler(function(res) {
+          btn.disabled = false;
+          btn.innerText = "Valider l'inscription";
+          if (res && res.success) {
+            closeRegisterModal();
+            alert("🎉 Inscription réussie ! Votre identifiant de connexion est " + res.identifiant);
+          } else {
+            var msgError = (res && res.message) ? res.message : "Erreur lors de l'inscription.";
+            errDiv.innerText = "⚠️ " + msgError;
+            errDiv.style.display = "block";
+          }
+        })
+        .withFailureHandler(function(err) {
+          btn.disabled = false;
+          btn.innerText = "Valider l'inscription";
+          errDiv.innerText = "🚨 Erreur serveur : " + err.message;
+          errDiv.style.display = "block";
+        })
+        .registerNewCouple(coupleData);
+    }
+
+    function closeRegisterModal() {
+      document.getElementById("registerModal").style.display = "none";
+      var errDiv = document.getElementById("registerError");
+      if (errDiv) {
+        errDiv.style.display = "none";
+        errDiv.innerText = "";
+      }
+    }
+  </script>
+</body>
+</html>
